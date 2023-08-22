@@ -106,6 +106,13 @@ export class Game extends Entity {
 
     public evaluate(): void {
         const score = this.words.reduce((total, w) => total + w.getScore(), 0);
-        console.log(score);
+        let frees = 0;
+        for(let x = 0; x < 11; x++) {
+            for(let y = 0; y < 11; y++) {
+                if(this.collides({ x: TILE_SIZE * 14.5 + x * TILE_SIZE, y: TILE_SIZE * 8.5 + y * TILE_SIZE }, null).length == 0) frees++;
+            }
+        }
+        const ratio = score / text.join("").length;
+        console.log(Math.floor(ratio * 100) + "% --", Math.floor(score * score + frees * score));
     }
 }
