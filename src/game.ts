@@ -1,11 +1,13 @@
 import { bgColor } from "./colors";
 import { Blinders } from "./engine/blinders";
 import { Camera } from "./engine/camera";
+import { Container } from "./engine/container";
 import { Entity, sortByDepth } from "./engine/entity";
 import { Mouse } from "./engine/mouse";
-import { Vector } from "./engine/vector";
+import { Vector, ZERO } from "./engine/vector";
 import { HEIGHT, WIDTH } from "./index";
 import { King } from "./king";
+import { TextEntity } from "./text";
 import { TILE_SIZE, Word } from "./word";
 
 const text = [
@@ -61,6 +63,10 @@ export class Game extends Entity {
     private words: Word[] = [];
     private king = new King();
     private blinders: Blinders;
+    private ui = new Container(0, 0, [
+        new TextEntity("0% DONE", 18, 745, 585, -1, ZERO, { shadow: 2, align: "right" }),
+        new TextEntity("0", 35, 745, 225, -1, ZERO, { shadow: 3, align: "right" })
+    ]);
     
     constructor(private camera: Camera) {
         super(0, 0, 0, 0);
@@ -85,6 +91,7 @@ export class Game extends Entity {
         [...this.words].sort((a, b) => b.d - a.d).forEach(w => w.update(tick, mouse));
         this.king.update(tick, mouse);
         this.blinders.update(tick, mouse);
+        this.ui.update(tick, mouse);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
@@ -101,6 +108,7 @@ export class Game extends Entity {
             );
         }
 
+        this.ui.draw(ctx);
         [...this.words].sort(sortByDepth).forEach(w => w.draw(ctx));
         this.king.draw(ctx);
         this.blinders.draw(ctx);
@@ -123,6 +131,7 @@ export class Game extends Entity {
             }
         }
         const ratio = score / text.join("").length;
-        console.log(Math.floor(ratio * 100) + "% --", Math.floor(score * score + frees * score));
+        (this.ui.getChild(0) as TextEntity).content = Math.floor(ratio * 100) + "% DONE";
+        (this.ui.getChild(1) as TextEntity).content = Math.floor(score * score + frees * score).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
 }
