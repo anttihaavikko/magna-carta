@@ -1,6 +1,7 @@
 import { Camera } from "./engine/camera";
 import { Entity, sortByDepth } from "./engine/entity";
 import { Mouse } from "./engine/mouse";
+import { Vector } from "./engine/vector";
 import { HEIGHT, WIDTH } from "./index";
 import { TILE_SIZE, Word } from "./word";
 
@@ -62,7 +63,7 @@ export class Game extends Entity {
         let y = 0;
         let count = 0;
         text.forEach((w, i) => {
-            this.words.push(new Word(w, TILE_SIZE + TILE_SIZE * x, TILE_SIZE + y * TILE_SIZE, this));
+            this.words.push(new Word(w.toUpperCase(), TILE_SIZE + TILE_SIZE * x, TILE_SIZE + y * TILE_SIZE, this));
             count++;
             x += w.length;
             if(count >= wordsPerLine[y]) {
@@ -93,5 +94,9 @@ export class Game extends Entity {
         }
 
         [...this.words].sort(sortByDepth).forEach(w => w.draw(ctx));
+    }
+
+    public collides(point: Vector, ignore: Word): Word[] {
+        return this.words.filter(w => w !== ignore).filter(w => w.isInside(point));
     }
 }
