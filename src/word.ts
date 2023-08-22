@@ -8,16 +8,21 @@ export const TILE_SIZE = 30;
 export class Word extends Draggable {
     private rotated = false;
     private rightClicked = false;
+    private rotation = 0;
+    private original: string;
 
     constructor(private word: string, x: number, y: number, private game: Game) {
         super(x, y, TILE_SIZE * word.length, TILE_SIZE);
+        this.original = word;
     }
 
     public update(tick: number, mouse: Mouse): void {
         super.update(tick, mouse);
 
         if(this.dragging && this.rightClicked && !mouse.right) {
-            this.rotated = !this.rotated;
+            this.rotation = (this.rotation + 1) % 4;
+            this.rotated = this.rotation % 2 == 1;
+            this.word = this.rotation > 1 ? this.original.split("").reverse().join("") : this.original;
             this.offset = { x: this.offset.y, y: this.offset.x };
         }
 
