@@ -58,6 +58,7 @@ export class Word extends Draggable {
             ctx.setLineDash([5, 5]);
             roundRect(ctx, snap.x + 2, snap.y + 2, this.s.x - 4, this.s.y - 4, 5);
             ctx.stroke();
+            ctx.setLineDash([]);
         }
 
         ctx.fillStyle = "#000";

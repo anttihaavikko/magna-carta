@@ -1,8 +1,10 @@
+import { Blinders } from "./engine/blinders";
 import { Camera } from "./engine/camera";
 import { Entity, sortByDepth } from "./engine/entity";
 import { Mouse } from "./engine/mouse";
 import { Vector } from "./engine/vector";
 import { HEIGHT, WIDTH } from "./index";
+import { King } from "./king";
 import { TILE_SIZE, Word } from "./word";
 
 const text = [
@@ -56,6 +58,8 @@ export class Game extends Entity {
     public currentDepth = 0;
 
     private words: Word[] = [];
+    private king = new King();
+    private blinders: Blinders;
     
     constructor(private camera: Camera) {
         super(0, 0, 0, 0);
@@ -72,11 +76,14 @@ export class Game extends Entity {
                 y++;
             }
         });
+        this.blinders = new Blinders(800, 600);
     }
 
     public update(tick: number, mouse: Mouse): void {
         super.update(tick, mouse);
         [...this.words].sort((a, b) => b.d - a.d).forEach(w => w.update(tick, mouse));
+        this.king.update(tick, mouse);
+        this.blinders.update(tick, mouse);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
@@ -94,6 +101,8 @@ export class Game extends Entity {
         }
 
         [...this.words].sort(sortByDepth).forEach(w => w.draw(ctx));
+        this.king.draw(ctx);
+        this.blinders.draw(ctx);
     }
 
     public isInGrid(point: Vector): boolean {

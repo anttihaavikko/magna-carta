@@ -1,9 +1,8 @@
-import { HEIGHT, WIDTH } from "../index";
 import { Entity } from "./entity";
 
 export class Blinders extends Entity {
-    constructor() {
-        super(0, 0, 0, 0);
+    constructor(w: number, h: number) {
+        super(0, 0, w, h);
         this.d = 500;
         this.open();
     }
@@ -20,7 +19,7 @@ export class Blinders extends Entity {
 
     public draw(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = "#000";
-        ctx.fillRect(0, 0, WIDTH * this.scale.x, HEIGHT);
-        ctx.fillRect(WIDTH - WIDTH * this.scale.x, 0, WIDTH * this.scale.x, HEIGHT);
+        ctx.fillRect(0, 0, this.s.x * this.scale.x, this.s.y);
+        ctx.fillRect(this.s.x - this.s.x * this.scale.x, 0, this.s.x * this.scale.x, this.s.y);
     }
 }
