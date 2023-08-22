@@ -4,6 +4,8 @@ import { Camera } from "./engine/camera";
 import { Container } from "./engine/container";
 import { Entity, sortByDepth } from "./engine/entity";
 import { Mouse } from "./engine/mouse";
+import { random } from "./engine/random";
+import { RectParticle } from "./engine/rect";
 import { Vector, ZERO } from "./engine/vector";
 import { HEIGHT, WIDTH } from "./index";
 import { King } from "./king";
@@ -68,6 +70,7 @@ export class Game extends Entity {
         new TextEntity("0", 35, 745, 225, -1, ZERO, { shadow: 3, align: "right" })
     ]);
     private hasRotated: boolean;
+    private effects = new Container();
     
     constructor(private camera: Camera) {
         super(0, 0, 0, 0);
@@ -87,10 +90,21 @@ export class Game extends Entity {
         this.blinders = new Blinders(800, 600);
     }
 
+    public addEffect(e: Entity): void {
+        this.effects.add(e);
+    }
+
+    public addBits(pos: Vector, amount: number): void {
+        for(let i = 0; i < amount; i++) {
+            this.effects.add(new RectParticle(pos.x, pos.y, 5, 5, 1, { x: random(-3, 3), y: random(-8, 0) }, { force: { x: 0, y: 0.2 }, color: "#fff3" }));
+        }
+    }
+
     public update(tick: number, mouse: Mouse): void {
         super.update(tick, mouse);
         [...this.words].sort((a, b) => b.d - a.d).forEach(w => w.update(tick, mouse));
         this.king.update(tick, mouse);
+        this.effects.update(tick, mouse);
         this.blinders.update(tick, mouse);
         this.ui.update(tick, mouse);
     }
@@ -111,6 +125,7 @@ export class Game extends Entity {
 
         this.ui.draw(ctx);
         [...this.words].sort(sortByDepth).forEach(w => w.draw(ctx));
+        this.effects.draw(ctx);
         this.king.draw(ctx);
         this.blinders.draw(ctx);
     }

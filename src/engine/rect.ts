@@ -3,7 +3,7 @@ import { Particle } from "./particle";
 import { Vector } from "./vector";
 
 export class RectParticle extends Particle {
-    constructor(x: number, y: number, width: number, height: number, life: number, velocity: Vector, private options?) {
+    constructor(x: number, y: number, width: number, height: number, life: number, velocity: Vector, private options?: ParticleOptions) {
         super(x, y, width, height, life, velocity);
         if(this.options?.depth) {
             this.d = this.options.depth;

@@ -5,6 +5,8 @@ import { Vector, offset } from "./engine/vector";
 import { Game } from "./game";
 import { roundRect } from "./engine/drawing";
 import { capeColor, tileBorder, tileColor } from "./colors";
+import { Pulse } from "./engine/pulse";
+import { random } from "./engine/random";
 
 export const TILE_SIZE = 30;
 
@@ -14,6 +16,8 @@ export class Word extends Draggable {
     private rotation = 0;
     private original: string;
     private blocked: boolean;
+
+    private prevPos = { x: 0, y: 0 };
 
     constructor(private word: string, x: number, y: number, private game: Game) {
         super(x, y, TILE_SIZE * word.length, TILE_SIZE);
@@ -71,10 +75,13 @@ export class Word extends Draggable {
         ctx.fillStyle = tileBorder;
         ctx.fillRect(this.p.x, this.p.y, this.s.x - 3, this.s.y - 3);
 
+        const snap = this.getSnapPos();
+
         const letters = this.word.split("").map((letter, i) => {
             const p = { x: this.p.x + i * TILE_SIZE * dx + TILE_SIZE * 0.5, y: this.p.y + i * TILE_SIZE * dy + TILE_SIZE * 0.5 };
-            const snapped = offset(this.getSnapPos(), i * TILE_SIZE * dx, i * TILE_SIZE * dy);
+            const snapped = offset(snap, i * TILE_SIZE * dx, i * TILE_SIZE * dy);
             const others = this.game.collides(p, this);
+
             return {
                 point: p,
                 letter,
@@ -98,8 +105,14 @@ export class Word extends Draggable {
                 ctx.setLineDash([]);
                 ctx.lineWidth = 4;
                 ctx.strokeRect(this.p.x + i * TILE_SIZE * dx - 2, this.p.y + i * TILE_SIZE * dy - 2, TILE_SIZE + 1, TILE_SIZE + 1);
+
+                // if(!letter.outside && (snap.x != this.prevPos.x || snap.y != this.prevPos.y)) {
+                //     this.game.addEffect(new Pulse(snap.x + i * dx * TILE_SIZE + TILE_SIZE * 0.5, snap.y + i * dy * TILE_SIZE + TILE_SIZE * 0.5, 30, random(0.8, 0.9), 5, 50));
+                // }
             }
         });
+
+        this.prevPos = snap;
     }
 
     private is(point: Vector, letter: string): boolean {
@@ -123,6 +136,7 @@ export class Word extends Draggable {
 
     protected drop(): void {
         this.p = this.getSnapPos();
+        const p = offset(this.p, TILE_SIZE * 0.5, TILE_SIZE * 0.5);
         this.game.evaluate();
     }
 
