@@ -1,7 +1,9 @@
+import { ContextReplacementPlugin } from "webpack";
 import { Draggable } from "./engine/draggable";
 import { Mouse } from "./engine/mouse";
 import { Vector, offset } from "./engine/vector";
 import { Game } from "./game";
+import { roundRect } from "./engine/drawing";
 
 export const TILE_SIZE = 30;
 
@@ -10,10 +12,19 @@ export class Word extends Draggable {
     private rightClicked = false;
     private rotation = 0;
     private original: string;
+    private blocked: boolean;
 
     constructor(private word: string, x: number, y: number, private game: Game) {
         super(x, y, TILE_SIZE * word.length, TILE_SIZE);
         this.original = word;
+    }
+
+    public getScore(): number {
+        return this.blocked ? 0 : this.word.length;
+    }
+
+    public isDragging(): boolean {
+        return this.dragging;
     }
 
     public update(tick: number, mouse: Mouse): void {
@@ -40,6 +51,15 @@ export class Word extends Draggable {
         ctx.font = "15px arial black";
         ctx.textAlign = "center";
 
+        if(this.dragging) {
+            const snap = this.getSnapPos();
+            ctx.strokeStyle = "#fff9";
+            ctx.lineWidth = 5;
+            ctx.setLineDash([5, 5]);
+            roundRect(ctx, snap.x + 2, snap.y + 2, this.s.x - 4, this.s.y - 4, 5);
+            ctx.stroke();
+        }
+
         ctx.fillStyle = "#000";
         const dx = this.rotated ? 0 : 1;
         const dy = this.rotated ? 1 : 0;
@@ -48,26 +68,30 @@ export class Word extends Draggable {
         ctx.fillStyle = "#eee";
         ctx.fillRect(this.p.x, this.p.y, this.s.x - 3, this.s.y - 3);
 
-        if(this.dragging) {
-            const snap = this.getSnapPos();
-            ctx.strokeStyle = "#fff6";
-            ctx.lineWidth = 3;
-            ctx.setLineDash([5, 5]);
-            ctx.strokeRect(snap.x, snap.y, this.s.x, this.s.y);
-        }
-
-        this.word.split("").forEach((letter, i) => {
+        const letters = this.word.split("").map((letter, i) => {
             const p = { x: this.p.x + i * TILE_SIZE * dx + TILE_SIZE * 0.5, y: this.p.y + i * TILE_SIZE * dy + TILE_SIZE * 0.5 };
+            const snapped = offset(this.getSnapPos(), i * TILE_SIZE * dx, i * TILE_SIZE * dy);
             const others = this.game.collides(p, this);
-            const clash = others.length > 0;
-            const bad = clash && others.some(o => !o.is(offset(this.getSnapPos(), i * TILE_SIZE * dx, i * TILE_SIZE * dy), letter));
+            return {
+                point: p,
+                letter,
+                clash: others.length > 0,
+                bad: others.some(o => !o.is(snapped, letter)),
+                outside: !this.game.isInGrid(snapped)
+            } as Letter;
+        });
+
+        this.blocked = letters.some(l => l.outside || l.bad);
+        const partial = letters.some(l => !l.outside) && this.blocked;
+
+        letters.forEach((letter, i) => {
             ctx.fillStyle = "#fff";
-            if(others.length) ctx.fillStyle = bad ? "pink" : "lime";
+            if(letter.clash || partial && letter.outside) ctx.fillStyle = letter.bad || letter.outside ? "pink" : "lime";
             ctx.fillRect(this.p.x + i * TILE_SIZE * dx, this.p.y + i * TILE_SIZE * dy, TILE_SIZE - 3, TILE_SIZE - 3);
             ctx.fillStyle = "#000";
-            ctx.fillText(letter, this.p.x + i * TILE_SIZE * dx + TILE_SIZE * 0.5 - 1, this.p.y + 19 + i * TILE_SIZE * dy);
-            if(clash) {
-                ctx.strokeStyle = bad ? "red" : "green";
+            ctx.fillText(letter.letter, this.p.x + i * TILE_SIZE * dx + TILE_SIZE * 0.5 - 1, this.p.y + 19 + i * TILE_SIZE * dy);
+            if(letter.clash || letter.bad || partial && letter.outside) {
+                ctx.strokeStyle = letter.bad || letter.outside ? "red" : "green";
                 ctx.setLineDash([]);
                 ctx.lineWidth = 4;
                 ctx.strokeRect(this.p.x + i * TILE_SIZE * dx - 2, this.p.y + i * TILE_SIZE * dy - 2, TILE_SIZE + 1, TILE_SIZE + 1);
@@ -96,6 +120,7 @@ export class Word extends Draggable {
 
     protected drop(): void {
         this.p = this.getSnapPos();
+        this.game.evaluate();
     }
 
     private getSnapPos(): Vector {
@@ -104,4 +129,12 @@ export class Word extends Draggable {
             y: Math.round(this.p.y / TILE_SIZE) * TILE_SIZE
         };
     }
+}
+
+interface Letter {
+    point: Vector;
+    letter: string;
+    clash: boolean;
+    bad: boolean;
+    outside: boolean;
 }

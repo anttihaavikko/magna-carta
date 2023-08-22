@@ -96,7 +96,16 @@ export class Game extends Entity {
         [...this.words].sort(sortByDepth).forEach(w => w.draw(ctx));
     }
 
+    public isInGrid(point: Vector): boolean {
+        return point.x > TILE_SIZE * 13 && point.x < TILE_SIZE * 25 && point.y > TILE_SIZE * 7 && point.y < TILE_SIZE * 19;
+    }
+
     public collides(point: Vector, ignore: Word): Word[] {
-        return this.words.filter(w => w !== ignore).filter(w => w.isInside(point));
+        return this.words.filter(w => !w.isDragging() && w !== ignore && w.isInside(point));
+    }
+
+    public evaluate(): void {
+        const score = this.words.reduce((total, w) => total + w.getScore(), 0);
+        console.log(score);
     }
 }
