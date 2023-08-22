@@ -13,9 +13,16 @@ export class King extends Entity {
 
     constructor() {
         super(200, 1100, 0, 0);
-        this.tween = new Tween(this, easeQuadOut)
-        
-        setTimeout(() => this.tween.move({ x: 202, y: 600 }, 0.4), 500); 
+        this.tween = new Tween(this, easeQuadOut);
+        setTimeout(() => this.show(), 500); 
+    }
+
+    public show(): void {
+        this.tween.move({ x: 200, y: 600 }, 0.4)
+    }
+
+    public hide(): void {
+        this.tween.move({ x: 200, y: 1100}, 0.4);
     }
 
     public update(tick: number, mouse: Mouse): void {
@@ -79,6 +86,7 @@ export class King extends Entity {
         ctx.quadraticCurveTo(this.p.x, this.p.y - 90, this.p.x - 50, this.p.y + 30);
         ctx.lineTo(this.p.x + 50, this.p.y + 30);
         ctx.quadraticCurveTo(this.p.x, this.p.y - 90, this.p.x + 55, this.p.y - 200 - this.phase * 15);
+        ctx.lineTo(this.p.x + 50, this.p.y - 200 - this.phase * 15);
         ctx.quadraticCurveTo(this.p.x, this.p.y - 150 - this.phase * 15, this.p.x - 55, this.p.y - 200 - this.phase * 15);
         ctx.fill();
         ctx.stroke();

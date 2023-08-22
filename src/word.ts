@@ -36,6 +36,7 @@ export class Word extends Draggable {
             this.rotated = this.rotation % 2 == 1;
             this.word = this.rotation > 1 ? this.original.split("").reverse().join("") : this.original;
             this.offset = { x: this.offset.y, y: this.offset.x };
+            this.game.markRotate();
         }
 
         this.rightClicked = mouse.right;

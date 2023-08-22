@@ -64,9 +64,10 @@ export class Game extends Entity {
     private king = new King();
     private blinders: Blinders;
     private ui = new Container(0, 0, [
-        new TextEntity("0% DONE", 18, 745, 585, -1, ZERO, { shadow: 2, align: "right" }),
+        new TextEntity("0% DONE", 18, 745, 587, -1, ZERO, { shadow: 2, align: "right" }),
         new TextEntity("0", 35, 745, 225, -1, ZERO, { shadow: 3, align: "right" })
     ]);
+    private hasRotated: boolean;
     
     constructor(private camera: Camera) {
         super(0, 0, 0, 0);
@@ -122,6 +123,10 @@ export class Game extends Entity {
         return this.words.filter(w => !w.isDragging() && w !== ignore && w.isInside(point));
     }
 
+    public markRotate(): void {
+        this.hasRotated = true;
+    }
+
     public evaluate(): void {
         const score = this.words.reduce((total, w) => total + w.getScore(), 0);
         let frees = 0;
@@ -131,7 +136,18 @@ export class Game extends Entity {
             }
         }
         const ratio = score / text.join("").length;
+        const totalScore = Math.floor(score * score + frees * score);
         (this.ui.getChild(0) as TextEntity).content = Math.floor(ratio * 100) + "% DONE";
-        (this.ui.getChild(1) as TextEntity).content = Math.floor(score * score + frees * score).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        (this.ui.getChild(1) as TextEntity).content = totalScore.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+        if(totalScore > 2000 && !this.hasRotated) {
+            this.king.show();
+            return;
+        }
+
+        if(totalScore > 0) {
+            this.king.hide();
+            return;
+        }
     }
 }
