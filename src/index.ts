@@ -42,6 +42,21 @@ document.onmousemove = (e: MouseEvent) => {
   mouse.y = isFull ? (e.y / window.innerHeight * 600) : e.offsetY;
 };
 
+let ratio = 1;
+let x = 0;
+let y = 0;
+
+const resize = () => {
+  ratio = Math.min(window.innerWidth / WIDTH, window.innerHeight / HEIGHT);
+  canvas.style.transformOrigin = "top left";
+  x = (window.innerWidth - WIDTH * ratio) * 0.5;
+  y = (window.innerHeight - HEIGHT * ratio) * 0.5;
+  canvas.style.transform = `translate(${x}px,${y}px) scale(${ratio})`;
+};
+
+resize();
+window.onresize = resize;
+
 document.onkeydown = (e: KeyboardEvent) => {
   // game.audio.prepare();
   if(e.key == 'f') {
