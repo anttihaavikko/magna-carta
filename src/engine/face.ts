@@ -3,7 +3,7 @@ import { Entity } from "./entity";
 import { Mouse } from "./mouse";
 
 export class Face extends Entity {
-    constructor() {
+    constructor(private blushColor: string) {
         super(0, 0, 0, 0);
     }
 
@@ -15,8 +15,8 @@ export class Face extends Entity {
         drawCircle(ctx, { x: -50, y: 0 }, 10, "#000");
         drawCircle(ctx, { x: 50, y: 0 }, 10, "#000");
 
-        drawEllipse(ctx, { x: -65, y: 20 }, 15, 10, "pink");
-        drawEllipse(ctx, { x: 65, y: 20 }, 15, 10, "pink");
+        drawEllipse(ctx, { x: -65, y: 20 }, 15, 10, this.blushColor);
+        drawEllipse(ctx, { x: 65, y: 20 }, 15, 10, this.blushColor);
 
         ctx.beginPath();
         ctx.lineWidth = 7;

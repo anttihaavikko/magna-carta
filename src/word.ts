@@ -4,6 +4,7 @@ import { Mouse } from "./engine/mouse";
 import { Vector, offset } from "./engine/vector";
 import { Game } from "./game";
 import { roundRect } from "./engine/drawing";
+import { capeColor, tileBorder, tileColor } from "./colors";
 
 export const TILE_SIZE = 30;
 
@@ -66,7 +67,7 @@ export class Word extends Draggable {
         const dy = this.rotated ? 1 : 0;
         ctx.fillRect(this.p.x - 3, this.p.y - 3, this.s.x + 3, this.s.y + 3);
 
-        ctx.fillStyle = "#eee";
+        ctx.fillStyle = tileBorder;
         ctx.fillRect(this.p.x, this.p.y, this.s.x - 3, this.s.y - 3);
 
         const letters = this.word.split("").map((letter, i) => {
@@ -86,13 +87,13 @@ export class Word extends Draggable {
         const partial = letters.some(l => !l.outside) && this.blocked;
 
         letters.forEach((letter, i) => {
-            ctx.fillStyle = "#fff";
-            if(letter.clash || partial && letter.outside) ctx.fillStyle = letter.bad || letter.outside ? "pink" : "lime";
+            ctx.fillStyle = tileColor;
+            if(letter.clash || partial && letter.outside) ctx.fillStyle = letter.bad || letter.outside ? "pink" : "#F1EE95";
             ctx.fillRect(this.p.x + i * TILE_SIZE * dx, this.p.y + i * TILE_SIZE * dy, TILE_SIZE - 3, TILE_SIZE - 3);
             ctx.fillStyle = "#000";
             ctx.fillText(letter.letter, this.p.x + i * TILE_SIZE * dx + TILE_SIZE * 0.5 - 1, this.p.y + 19 + i * TILE_SIZE * dy);
             if(letter.clash || letter.bad || partial && letter.outside) {
-                ctx.strokeStyle = letter.bad || letter.outside ? "red" : "green";
+                ctx.strokeStyle = letter.bad || letter.outside ? "#D5573B" : "#000";
                 ctx.setLineDash([]);
                 ctx.lineWidth = 4;
                 ctx.strokeRect(this.p.x + i * TILE_SIZE * dx - 2, this.p.y + i * TILE_SIZE * dy - 2, TILE_SIZE + 1, TILE_SIZE + 1);

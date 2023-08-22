@@ -1,3 +1,4 @@
+import { blushColor, capeColor, crownColor, shirtColor, skinColor } from "./colors";
 import { drawCircle } from "./engine/drawing";
 import { Entity } from "./engine/entity";
 import { Face } from "./engine/face";
@@ -8,7 +9,7 @@ import { offset } from "./engine/vector";
 
 export class King extends Entity {
     private phase = 0;
-    private face = new Face();
+    private face = new Face(blushColor);
 
     constructor() {
         super(200, 1100, 0, 0);
@@ -35,14 +36,14 @@ export class King extends Entity {
         ctx.beginPath();
         ctx.strokeStyle = "#000";
         ctx.lineWidth = 10;
-        ctx.fillStyle = "red";
+        ctx.fillStyle = capeColor;
         ctx.moveTo(this.p.x - 150 + this.phase * 7, this.p.y + 20);
         ctx.quadraticCurveTo(this.p.x, this.p.y - 500 - this.phase * 50, this.p.x + 150 - this.phase * 7, this.p.y + 20);
         // ctx.lineTo(this.p.x - 100, this.p.y);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = "#fff";
+        ctx.fillStyle = skinColor;
         ctx.beginPath();
         ctx.moveTo(this.p.x - 55, this.p.y - 200 - this.phase * 15);
         ctx.quadraticCurveTo(this.p.x, this.p.y - 300, this.p.x + 55, this.p.y - 200 - this.phase * 15);
@@ -50,14 +51,14 @@ export class King extends Entity {
         ctx.fill();
 
         // head filling
-        drawCircle(ctx, offset(this.p, 0, -300 - this.phase * 20), 90, "#fff");
+        drawCircle(ctx, offset(this.p, 0, -300 - this.phase * 20), 90, skinColor);
         // ears
-        drawCircle(ctx, offset(this.p, -98, -300 - this.phase * 30), 15, "#fff");
-        drawCircle(ctx, offset(this.p, 98, -300 - this.phase * 30), 15, "#fff");
+        drawCircle(ctx, offset(this.p, -98, -300 - this.phase * 30), 15, skinColor);
+        drawCircle(ctx, offset(this.p, 98, -300 - this.phase * 30), 15, skinColor);
 
         // crown
         ctx.lineWidth = 20;
-        ctx.fillStyle = "yellow";
+        ctx.fillStyle = crownColor;
         ctx.beginPath();
         ctx.moveTo(this.p.x - 75, this.p.y - 370 - this.phase * 25);
         ctx.quadraticCurveTo(this.p.x, this.p.y - 360 - this.phase * 25, this.p.x + 75, this.p.y - 370 - this.phase * 25);
@@ -71,7 +72,7 @@ export class King extends Entity {
         ctx.fill();
 
         // shirt
-        ctx.fillStyle = "pink";
+        ctx.fillStyle = shirtColor;
         ctx.lineWidth = 10;
         ctx.beginPath();
         ctx.moveTo(this.p.x - 55, this.p.y - 200 - this.phase * 15);

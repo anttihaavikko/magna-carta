@@ -1,3 +1,4 @@
+import { bgColor } from "./colors";
 import { Blinders } from "./engine/blinders";
 import { Camera } from "./engine/camera";
 import { Entity, sortByDepth } from "./engine/entity";
@@ -87,7 +88,7 @@ export class Game extends Entity {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        ctx.fillStyle = "#ccc";
+        ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
         ctx.fillStyle = "#fff3";
