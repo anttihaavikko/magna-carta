@@ -9,8 +9,8 @@ import { TILE_SIZE } from "./word";
 
 export class Parchment extends Entity {
     private ui = new Container(0, 0, [
-        new TextEntity("0% DONE", 18, 745, 610, -1, ZERO, { align: "right", color: "#D5573B99" }),
-        new TextEntity("0", 28, 745, 216, -1, ZERO, { align: "right", color: "#D5573B99" })
+        new TextEntity("0% DONE", 18, 750, 612, -1, ZERO, { align: "right", color: "#D5573B99" }),
+        new TextEntity("0", 28, 750, 216, -1, ZERO, { align: "right", color: "#D5573B99" })
     ]);
     
     constructor() {
