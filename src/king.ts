@@ -7,6 +7,7 @@ import { Mouse } from "./engine/mouse";
 import { transformTo } from "./engine/transformer";
 import { Tween, easeQuadOut } from "./engine/tween";
 import { offset } from "./engine/vector";
+import { Game } from "./game";
 
 export class King extends Entity {
     private phase = 0;
@@ -15,7 +16,7 @@ export class King extends Entity {
 
     private showTimer: any;
 
-    constructor() {
+    constructor(private game: Game) {
         super(200, 1150, 0, 0);
         this.tween = new Tween(this, easeQuadOut);
         this.bubble.scale = { x: 0, y: 0 };

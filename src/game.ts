@@ -7,7 +7,7 @@ import { Mouse } from "./engine/mouse";
 import { random } from "./engine/random";
 import { RectParticle } from "./engine/rect";
 import { transformTo } from "./engine/transformer";
-import { Vector, ZERO } from "./engine/vector";
+import { Vector, ZERO, offset } from "./engine/vector";
 import { HEIGHT, WIDTH } from "./index";
 import { King } from "./king";
 import { Parchment } from "./parchment";
@@ -15,6 +15,8 @@ import { TextEntity } from "./engine/text";
 import { TILE_SIZE, Word } from "./word";
 import { WobblyText } from "./engine/wobbly";
 import { Dog } from "./dog";
+import { LineParticle } from "./engine/line";
+import { Pulse } from "./engine/pulse";
 
 const text = [
     "JOHN",
@@ -67,8 +69,6 @@ export class Game extends Entity {
     public currentDepth = 0;
 
     private words: Word[] = [];
-    private king = new King();
-    private dog = new Dog();
     private blinders: Blinders;
     
     private hasRotated: boolean;
@@ -77,6 +77,11 @@ export class Game extends Entity {
     private parchment = new Parchment();
 
     private phase = 1;
+
+    private fgEffects = new Container(450, 325);
+
+    private king = new King(this);
+    private dog = new Dog(this);
 
     private ui = new Container(0, 0, [
         new WobblyText("MAGNA CARTA", 80, 100, 570, 0.6, 5, { align: "left", outline: 20, spacing: 5 }),
@@ -121,16 +126,7 @@ export class Game extends Entity {
         this.blinders.update(tick, mouse);
         this.parchment.update(tick, mouse);
         this.ui?.update(tick, mouse);
-    }
-
-    private drawDottedLine(ctx: CanvasRenderingContext2D, size: number, gap: number, x: number, y: number): void {
-        ctx.lineWidth = size;
-        ctx.setLineDash([0, size + gap]);
-        ctx.lineDashOffset = x;
-        ctx.beginPath();
-        ctx.moveTo(0, 650 - y);
-        ctx.lineTo(1500, 650 - y);
-        ctx.stroke();
+        this.fgEffects.update(tick, mouse);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
@@ -162,12 +158,23 @@ export class Game extends Entity {
 
         this.effects.draw(ctx);
         [...this.words].sort(sortByDepth).forEach(w => w.draw(ctx));
+        this.fgEffects.draw(ctx);
         this.king.draw(ctx);
         this.dog.draw(ctx);
 
         ctx.lineJoin = "round";
         this.ui?.draw(ctx);
         this.blinders.draw(ctx);
+    }
+
+    private drawDottedLine(ctx: CanvasRenderingContext2D, size: number, gap: number, x: number, y: number): void {
+        ctx.lineWidth = size;
+        ctx.setLineDash([0, size + gap]);
+        ctx.lineDashOffset = x;
+        ctx.beginPath();
+        ctx.moveTo(0, 650 - y);
+        ctx.lineTo(1500, 650 - y);
+        ctx.stroke();
     }
 
     public isInGrid(point: Vector): boolean {

@@ -1,12 +1,15 @@
-import { blushColor, capeColor, shirtColor, skinColor } from "./colors";
+import { blushColor, crownColor } from "./colors";
 import { drawCircle, drawEllipse } from "./engine/drawing";
 import { Entity } from "./engine/entity";
 import { Face } from "./engine/face";
 import { Mouse } from "./engine/mouse";
 import { random } from "./engine/random";
 import { transformTo } from "./engine/transformer";
-import { Tween, easeBounceOut, easeQuadOut } from "./engine/tween";
+import { Tween, easeBounceOut } from "./engine/tween";
 import { offset } from "./engine/vector";
+import { Game } from "./game";
+
+const dogColor = crownColor;
 
 export class Dog extends Entity {
     private phase = 0;
@@ -15,7 +18,7 @@ export class Dog extends Entity {
     private diff = 250;
     private rotation = 0;
 
-    constructor() {
+    constructor(private game: Game) {
         super(450, 1150, 0, 0);
         this.tween = new Tween(this, easeBounceOut);
 
@@ -75,7 +78,7 @@ export class Dog extends Entity {
         ctx.setLineDash([]);
 
         // ears
-        ctx.fillStyle = shirtColor;
+        ctx.fillStyle = dogColor;
         ctx.lineWidth = 13;
         ctx.strokeStyle = "#000";
         // right
@@ -106,8 +109,8 @@ export class Dog extends Entity {
         // head fill
         ctx.lineDashOffset = 0;
         ctx.lineWidth = 40;
-        ctx.strokeStyle = shirtColor;
-        ctx.fillStyle = shirtColor;
+        ctx.strokeStyle = dogColor;
+        ctx.fillStyle = dogColor;
         ctx.setLineDash([0, 40]);
         ctx.lineCap = "round";
         ctx.beginPath();
@@ -124,7 +127,7 @@ export class Dog extends Entity {
         ctx.stroke();
 
         // head filling
-        drawCircle(ctx, offset(this.p, 0, -300 - this.phase * 20), 87, shirtColor);
+        drawCircle(ctx, offset(this.p, 0, -300 - this.phase * 20), 87, dogColor);
         drawCircle(ctx, offset(this.p, 10, -300 - this.phase * 40), 70, "#fff1");
         drawEllipse(ctx, offset(this.p, 10, 0 - this.phase * 40), 80, 200, "#fff1");
 
@@ -133,7 +136,7 @@ export class Dog extends Entity {
         // paws
         ctx.lineWidth = 10;
         ctx.strokeStyle = "#000";
-        ctx.fillStyle = shirtColor;
+        ctx.fillStyle = dogColor;
         // left
         ctx.save();
         ctx.translate(this.p.x - 50, this.p.y - 170 - this.phase * 40);
