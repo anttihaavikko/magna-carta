@@ -9,6 +9,7 @@ import { RectParticle } from "./engine/rect";
 import { Vector, ZERO } from "./engine/vector";
 import { HEIGHT, WIDTH } from "./index";
 import { King } from "./king";
+import { Parchment } from "./parchment";
 import { TextEntity } from "./text";
 import { TILE_SIZE, Word } from "./word";
 
@@ -65,13 +66,11 @@ export class Game extends Entity {
     private words: Word[] = [];
     private king = new King();
     private blinders: Blinders;
-    private ui = new Container(0, 0, [
-        new TextEntity("0% DONE", 18, 745, 587, -1, ZERO, { shadow: 2, align: "right" }),
-        new TextEntity("0", 35, 745, 225, -1, ZERO, { shadow: 3, align: "right" })
-    ]);
+    
     private hasRotated: boolean;
     private effects = new Container();
     private kingTimer: any;
+    private parchment = new Parchment();
     
     constructor(private camera: Camera) {
         super(0, 0, 0, 0);
@@ -88,7 +87,7 @@ export class Game extends Entity {
                 y++;
             }
         });
-        this.blinders = new Blinders(800, 600);
+        this.blinders = new Blinders(900, 650);
     }
 
     public addEffect(e: Entity): void {
@@ -107,24 +106,15 @@ export class Game extends Entity {
         this.king.update(tick, mouse);
         this.effects.update(tick, mouse);
         this.blinders.update(tick, mouse);
-        this.ui.update(tick, mouse);
+        this.parchment.update(tick, mouse);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-        ctx.fillStyle = "#fff3";
-        for(let i = 0; i < 11 * 11; i++) {
-            ctx.fillRect(
-                TILE_SIZE * 14 + (i % 11) * TILE_SIZE,
-                TILE_SIZE * 8 + Math.floor(i / 11) * TILE_SIZE,
-                TILE_SIZE - 3,
-                TILE_SIZE - 5
-            );
-        }
+        this.parchment.draw(ctx);
 
-        this.ui.draw(ctx);
         [...this.words].sort(sortByDepth).forEach(w => w.draw(ctx));
         this.effects.draw(ctx);
         this.king.draw(ctx);
@@ -132,7 +122,7 @@ export class Game extends Entity {
     }
 
     public isInGrid(point: Vector): boolean {
-        return point.x > TILE_SIZE * 13 && point.x < TILE_SIZE * 25 && point.y > TILE_SIZE * 7 && point.y < TILE_SIZE * 19;
+        return point.x > TILE_SIZE * 15 && point.x < TILE_SIZE * 27 && point.y > TILE_SIZE * 7 && point.y < TILE_SIZE * 19;
     }
 
     public collides(point: Vector, ignore: Word): Word[] {
@@ -153,8 +143,8 @@ export class Game extends Entity {
         }
         const ratio = score / text.join("").length;
         const totalScore = Math.floor(score * score + frees * score);
-        (this.ui.getChild(0) as TextEntity).content = Math.floor(ratio * 100) + "% DONE";
-        (this.ui.getChild(1) as TextEntity).content = totalScore.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        
+        this.parchment.setTexts(Math.floor(ratio * 100) + "% DONE", totalScore.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
 
         clearTimeout(this.kingTimer);
 

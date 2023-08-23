@@ -9,12 +9,12 @@ const ctx: CanvasRenderingContext2D = canvas.getContext("2d");
 const mouse: Mouse = { x: 0, y: 0 };
 const game = new Game(new Camera());
 
-export const WIDTH = 800;
-export const HEIGHT = 600;
+export const WIDTH = 900;
+export const HEIGHT = 650;
 
 canvas.id = "game";
-canvas.width = 800;
-canvas.height = 600;
+canvas.width = WIDTH;
+canvas.height = HEIGHT;
 // canvas.width = window.innerWidth;
 // canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
@@ -38,8 +38,8 @@ let isFull = false;
 document.onfullscreenchange = () => isFull = !isFull;
 
 document.onmousemove = (e: MouseEvent) => {
-  mouse.x = isFull ? (e.x / window.innerWidth * 800) : e.offsetX;
-  mouse.y = isFull ? (e.y / window.innerHeight * 600) : e.offsetY;
+  mouse.x = isFull ? (e.x / window.innerWidth * 900) : e.offsetX;
+  mouse.y = isFull ? (e.y / window.innerHeight * 650) : e.offsetY;
 };
 
 let ratio = 1;

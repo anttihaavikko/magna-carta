@@ -16,7 +16,7 @@ export class King extends Entity {
     private showTimer: any;
 
     constructor() {
-        super(200, 1100, 0, 0);
+        super(200, 1150, 0, 0);
         this.tween = new Tween(this, easeQuadOut);
         this.bubble.scale = { x: 0, y: 0 };
         this.showTimer = setTimeout(() => this.show([
@@ -37,13 +37,13 @@ export class King extends Entity {
     }
 
     public show(messages: string[]): void {
-        this.tween.move({ x: 200, y: 600 }, 0.4);
+        this.tween.move({ x: 200, y: 650 }, 0.4);
         setTimeout(() => this.bubble.show(messages), 500);
     }
 
     public hide(): void {
         this.bubble.hide();
-        this.tween.move({ x: 200, y: 1100}, 0.4);
+        this.tween.move({ x: 200, y: 1150}, 0.4);
     }
 
     public update(tick: number, mouse: Mouse): void {
