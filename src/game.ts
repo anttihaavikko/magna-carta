@@ -72,6 +72,8 @@ export class Game extends Entity {
     private effects = new Container();
     private kingTimer: any;
     private parchment = new Parchment();
+
+    private phase = 1;
     
     constructor(private camera: Camera) {
         super(0, 0, 0, 0);
@@ -102,6 +104,7 @@ export class Game extends Entity {
     }
 
     public update(tick: number, mouse: Mouse): void {
+        this.phase = Math.abs(Math.sin(tick * 0.002));
         super.update(tick, mouse);
         [...this.words].sort((a, b) => b.d - a.d).forEach(w => w.update(tick, mouse));
         this.king.update(tick, mouse);
@@ -124,22 +127,22 @@ export class Game extends Entity {
         ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, 900, 650);
 
-        ctx.strokeStyle = "#0001";
+        ctx.strokeStyle = "#777DA725";
         ctx.lineCap = "round";
         
-        this.drawDottedLine(ctx, 64, 0, 0, 0);
-        this.drawDottedLine(ctx, 48, 32 - 16, 32, 50);
-        this.drawDottedLine(ctx, 32, 32, 0, 80);
-        this.drawDottedLine(ctx, 32, 32, 32, 95);
-        this.drawDottedLine(ctx, 24, 40, 0, 110);
+        this.drawDottedLine(ctx, 64, 0, 0, 0 + this.phase * 5);
+        this.drawDottedLine(ctx, 48, 32 - 16, 32, 50 + this.phase * 7);
+        this.drawDottedLine(ctx, 32, 32, 0, 80 + this.phase * 9);
+        this.drawDottedLine(ctx, 32, 32, 32, 95 + this.phase * 11);
+        this.drawDottedLine(ctx, 24, 40, 0, 110 + this.phase * 13);
 
         ctx.save();
         transformTo(ctx, 450, 325, Math.PI);
-        this.drawDottedLine(ctx, 64, 0, 0, 0);
-        this.drawDottedLine(ctx, 48, 32 - 16, 32, 50);
-        this.drawDottedLine(ctx, 32, 32, 0, 80);
-        this.drawDottedLine(ctx, 32, 32, 32, 95);
-        this.drawDottedLine(ctx, 24, 40, 0, 110);
+        this.drawDottedLine(ctx, 64, 0, 0, 0 + this.phase * 5);
+        this.drawDottedLine(ctx, 48, 32 - 16, 32, 50 + this.phase * 7);
+        this.drawDottedLine(ctx, 32, 32, 0, 80 + this.phase * 9);
+        this.drawDottedLine(ctx, 32, 32, 32, 95 + this.phase * 11);
+        this.drawDottedLine(ctx, 24, 40, 0, 110 + this.phase * 13);
         ctx.restore();
 
         ctx.lineCap = "butt";
