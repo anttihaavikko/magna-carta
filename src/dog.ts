@@ -34,6 +34,7 @@ export class Dog extends Entity {
         this.diff = random(-500, 500);
         this.rotation = Math.random() < 0.7 ? 0 : 1;
         this.show();
+        setTimeout(() => this.face.openMouth(0.7, 0.2), 200);
         setTimeout(() => this.hide(), 900);
     }
 
@@ -50,6 +51,7 @@ export class Dog extends Entity {
     public update(tick: number, mouse: Mouse): void {
         super.update(tick, mouse);
         this.phase = Math.abs(Math.sin(tick * 0.003)) * 0.7;
+        this.face.update(tick, mouse);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {

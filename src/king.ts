@@ -51,6 +51,7 @@ export class King extends Entity {
         super.update(tick, mouse);
         this.phase = Math.abs(Math.sin(tick * 0.0025)) * 0.8;
         this.bubble.update(tick, mouse);
+        this.face.update(tick, mouse);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
