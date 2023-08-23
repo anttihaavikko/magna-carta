@@ -46,7 +46,7 @@ export class Dog extends Entity {
 
     public update(tick: number, mouse: Mouse): void {
         super.update(tick, mouse);
-        this.phase = Math.abs(Math.sin(tick * 0.0025)) * 0.8;
+        this.phase = Math.abs(Math.sin(tick * 0.003)) * 0.7;
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
@@ -81,7 +81,7 @@ export class Dog extends Entity {
         // right
         ctx.save();
         ctx.translate(this.p.x + 60, this.p.y - 340 - this.phase * 20);
-        ctx.rotate(Math.PI * 0.25 + this.phase * 0.1);
+        ctx.rotate(Math.PI * 0.25 + this.phase * 0.3);
         ctx.beginPath();
         ctx.moveTo(20, 0);
         ctx.quadraticCurveTo(30, -40, 0, -80);
@@ -93,7 +93,7 @@ export class Dog extends Entity {
         // left
         ctx.save();
         ctx.translate(this.p.x - 60, this.p.y - 340 - this.phase * 20);
-        ctx.rotate(-Math.PI * 0.25 - this.phase * 0.1);
+        ctx.rotate(-Math.PI * 0.25 - this.phase * 0.3);
         ctx.beginPath();
         ctx.moveTo(20, 0);
         ctx.quadraticCurveTo(30, -40, 0, -80);
@@ -129,6 +129,46 @@ export class Dog extends Entity {
         drawEllipse(ctx, offset(this.p, 10, 0 - this.phase * 40), 80, 200, "#fff1");
 
         ctx.setLineDash([]);
+
+        // paws
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "#000";
+        ctx.fillStyle = shirtColor;
+        // left
+        ctx.save();
+        ctx.translate(this.p.x - 50, this.p.y - 170 - this.phase * 40);
+        ctx.beginPath();
+        ctx.moveTo(20, 10);
+        ctx.quadraticCurveTo(30, 75, 0, 80);
+        ctx.quadraticCurveTo(-40, 75, -20, 0);
+        ctx.fill();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.lineWidth = 7;
+        ctx.moveTo(-7, 80);
+        ctx.lineTo(-7, 50);
+        ctx.moveTo(7, 80);
+        ctx.lineTo(7, 50);
+        ctx.stroke();
+        ctx.restore();
+        // right
+        ctx.save();
+        ctx.lineWidth = 10;
+        ctx.translate(this.p.x + 50, this.p.y - 170 - this.phase * 40);
+        ctx.beginPath();
+        ctx.moveTo(20, 0);
+        ctx.quadraticCurveTo(40, 75, 0, 80);
+        ctx.quadraticCurveTo(-30, 75, -20, 10);
+        ctx.fill();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.lineWidth = 7;
+        ctx.moveTo(-7, 80);
+        ctx.lineTo(-7, 50);
+        ctx.moveTo(7, 80);
+        ctx.lineTo(7, 50);
+        ctx.stroke();
+        ctx.restore();
 
         ctx.save();
         ctx.translate(this.p.x, this.p.y - 310 - this.phase * 45);
