@@ -14,6 +14,7 @@ import { Parchment } from "./parchment";
 import { TextEntity } from "./engine/text";
 import { TILE_SIZE, Word } from "./word";
 import { WobblyText } from "./engine/wobbly";
+import { Dog } from "./dog";
 
 const text = [
     "JOHN",
@@ -67,6 +68,7 @@ export class Game extends Entity {
 
     private words: Word[] = [];
     private king = new King();
+    private dog = new Dog();
     private blinders: Blinders;
     
     private hasRotated: boolean;
@@ -114,6 +116,7 @@ export class Game extends Entity {
         super.update(tick, mouse);
         [...this.words].sort((a, b) => b.d - a.d).forEach(w => w.update(tick, mouse));
         this.king.update(tick, mouse);
+        this.dog.update(tick, mouse);
         this.effects.update(tick, mouse);
         this.blinders.update(tick, mouse);
         this.parchment.update(tick, mouse);
@@ -160,6 +163,7 @@ export class Game extends Entity {
         this.effects.draw(ctx);
         [...this.words].sort(sortByDepth).forEach(w => w.draw(ctx));
         this.king.draw(ctx);
+        this.dog.draw(ctx);
 
         ctx.lineJoin = "round";
         this.ui?.draw(ctx);
@@ -193,6 +197,8 @@ export class Game extends Entity {
 
         clearTimeout(this.kingTimer);
 
+        // this.dog.hide();
+
         if(ratio >= 1) {
             this.king.show(["Good job!", "Didn't even know", "if a feat like", "that was possible!"]);
             this.kingTimer = setTimeout(() => this.king.hide(), 5000);
@@ -212,6 +218,8 @@ export class Game extends Entity {
                 "parchment over there."
             ]);
         }
+
+        this.dog.peek();
 
         if(totalScore > 0) {
             this.king.showMessage(["", "Yes indeed, just", "like that!", ""]);
