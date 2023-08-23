@@ -77,6 +77,7 @@ export class Game extends Entity {
     private parchment = new Parchment();
 
     private phase = 1;
+    private prevScore = 0;
 
     private fgEffects = new Container(450, 325);
 
@@ -194,7 +195,7 @@ export class Game extends Entity {
         let frees = 0;
         for(let x = 0; x < 11; x++) {
             for(let y = 0; y < 11; y++) {
-                if(this.collides({ x: TILE_SIZE * 14.5 + x * TILE_SIZE, y: TILE_SIZE * 8.5 + y * TILE_SIZE }, null).length == 0) frees++;
+                if(this.collides({ x: TILE_SIZE * 16.5 + x * TILE_SIZE, y: TILE_SIZE * 8.5 + y * TILE_SIZE }, null).length == 0) frees++;
             }
         }
         const ratio = score / text.join("").length;
@@ -226,7 +227,11 @@ export class Game extends Entity {
             ]);
         }
 
-        this.dog.peek();
+        if(totalScore > this.prevScore) {
+            this.dog.peek();
+        }
+
+        this.prevScore = totalScore;
 
         if(totalScore > 0) {
             this.king.showMessage(["", "Yes indeed, just", "like that!", ""]);
