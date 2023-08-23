@@ -4,6 +4,8 @@ import { Vector, offset } from "./engine/vector";
 import { Game } from "./game";
 import { roundRect } from "./engine/drawing";
 import { tileBorder, tileColor } from "./colors";
+import { Pulse } from "./engine/pulse";
+import { random } from "./engine/random";
 
 export const TILE_SIZE = 30;
 
@@ -36,6 +38,9 @@ export class Word extends Draggable {
         this.time = tick;
 
         if(this.dragging && this.rightClicked && !mouse.right) {
+
+            this.game.addEffect(new Pulse(this.p.x + this.offset.x, this.p.y + this.offset.y, 50, 0.8, 10, 100));
+
             this.rotation = (this.rotation + 1) % 4;
             this.rotated = this.rotation % 2 == 1;
             this.word = this.rotation > 1 ? this.original.split("").reverse().join("") : this.original;
@@ -114,9 +119,9 @@ export class Word extends Draggable {
                 ctx.lineWidth = 4;
                 ctx.strokeRect(this.p.x + i * TILE_SIZE * dx - 2, this.p.y + i * TILE_SIZE * dy - 2, TILE_SIZE + 1, TILE_SIZE + 1);
 
-                // if(!letter.outside && (snap.x != this.prevPos.x || snap.y != this.prevPos.y)) {
-                //     this.game.addEffect(new Pulse(snap.x + i * dx * TILE_SIZE + TILE_SIZE * 0.5, snap.y + i * dy * TILE_SIZE + TILE_SIZE * 0.5, 30, random(0.8, 0.9), 5, 50));
-                // }
+                if(!letter.outside && (snap.x != this.prevPos.x || snap.y != this.prevPos.y) && letter.clash && !letter.bad) {
+                    this.game.addEffect(new Pulse(snap.x + i * dx * TILE_SIZE + TILE_SIZE * 0.5, snap.y + i * dy * TILE_SIZE + TILE_SIZE * 0.5, 40, random(0.8, 0.9), 5, 60));
+                }
             }
         });
 

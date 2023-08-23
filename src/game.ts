@@ -150,8 +150,8 @@ export class Game extends Entity {
 
         this.parchment.draw(ctx);
 
-        [...this.words].sort(sortByDepth).forEach(w => w.draw(ctx));
         this.effects.draw(ctx);
+        [...this.words].sort(sortByDepth).forEach(w => w.draw(ctx));
         this.king.draw(ctx);
         this.blinders.draw(ctx);
     }
