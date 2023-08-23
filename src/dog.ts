@@ -17,6 +17,7 @@ export class Dog extends Entity {
     private visible = true;
     private diff = 250;
     private rotation = 0;
+    private hasCrown = false;
 
     constructor(private game: Game) {
         super(450, 1150, 0, 0);
@@ -31,6 +32,7 @@ export class Dog extends Entity {
             return;
         }
 
+        this.hasCrown = Math.random() < 0.1;
         this.diff = random(-500, 500);
         this.rotation = Math.random() < 0.7 ? 0 : 1;
         this.show();
@@ -189,6 +191,27 @@ export class Dog extends Entity {
         drawEllipse(ctx, { x: 0, y: 5}, 20, 12, "#000");
 
         ctx.restore();
+
+        if(this.hasCrown) {
+            // crown
+            ctx.save();
+            transformTo(ctx, this.p.x, this.p.y - 420, 0, 0.7, 0.7);
+            ctx.lineWidth = 25;
+            ctx.fillStyle = crownColor;
+            ctx.beginPath();
+            ctx.moveTo(this.p.x - 75, this.p.y - 370 - this.phase * 25);
+            ctx.quadraticCurveTo(this.p.x, this.p.y - 360 - this.phase * 25, this.p.x + 75, this.p.y - 370 - this.phase * 25);
+            ctx.lineTo(this.p.x + 75, this.p.y - 450 - this.phase * 25);
+            ctx.lineTo(this.p.x + 37, this.p.y - 420 - this.phase * 25);
+            ctx.lineTo(this.p.x, this.p.y - 460 - this.phase * 25);
+            ctx.lineTo(this.p.x - 37, this.p.y - 420 - this.phase * 25);
+            ctx.lineTo(this.p.x - 75, this.p.y - 450 - this.phase * 25);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.fill();
+            ctx.restore();
+        }
+
         ctx.restore();
     }
 }
