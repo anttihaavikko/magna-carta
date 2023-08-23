@@ -130,8 +130,8 @@ export class Dog extends Entity {
 
         // head filling
         drawCircle(ctx, offset(this.p, 0, -300 - this.phase * 20), 87, dogColor);
-        drawCircle(ctx, offset(this.p, 10, -300 - this.phase * 40), 70, "#fff1");
-        drawEllipse(ctx, offset(this.p, 10, 0 - this.phase * 40), 80, 200, "#fff1");
+        drawCircle(ctx, offset(this.p, 10, -300 - this.phase * 40), 70, "#fff4");
+        drawEllipse(ctx, offset(this.p, 10, 0 - this.phase * 40), 80, 200, "#fff4");
 
         ctx.setLineDash([]);
 
