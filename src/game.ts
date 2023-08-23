@@ -85,7 +85,7 @@ export class Game extends Entity {
     private dog = new Dog(this);
 
     private ui = new Container(0, 0, [
-        new WobblyText("MAGNA CARTA", 80, 100, 570, 0.6, 5, { align: "left", outline: 20, spacing: 5 }),
+        new WobblyText("MAGNA CARTA", 80, 100, 580, 0.6, 5, { align: "left", outline: 20, spacing: 5 }),
         new WobblyText("by Antti Haavikko", 35, 240, 630, 0.2, 5, { align: "left", outline: 12, spacing: 5 })
     ]);
     
@@ -210,6 +210,7 @@ export class Game extends Entity {
         if(ratio >= 1) {
             this.king.show(["Good job!", "Didn't even know", "if a feat like", "that was possible!"]);
             this.kingTimer = setTimeout(() => this.king.hide(), 5000);
+            this.dog.peek();
             return;
         }
 
