@@ -81,7 +81,7 @@ export class King extends Entity {
 
         // head filling
         drawCircle(ctx, offset(this.p, 0, -300 - this.phase * 20), 90, skinColor);
-        drawCircle(ctx, offset(this.p, 10, -300 - this.phase * 40), 70, "#fff6");
+        drawCircle(ctx, offset(this.p, 10, -300 - this.phase * 40), 70, "#fff4");
         // ears
         drawCircle(ctx, offset(this.p, -98, -300 - this.phase * 30), 15, skinColor);
         drawCircle(ctx, offset(this.p, 98, -300 - this.phase * 30), 15, skinColor);
