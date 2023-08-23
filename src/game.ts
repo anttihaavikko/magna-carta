@@ -6,6 +6,7 @@ import { Entity, sortByDepth } from "./engine/entity";
 import { Mouse } from "./engine/mouse";
 import { random } from "./engine/random";
 import { RectParticle } from "./engine/rect";
+import { transformTo } from "./engine/transformer";
 import { Vector, ZERO } from "./engine/vector";
 import { HEIGHT, WIDTH } from "./index";
 import { King } from "./king";
@@ -109,9 +110,40 @@ export class Game extends Entity {
         this.parchment.update(tick, mouse);
     }
 
+    private drawDottedLine(ctx: CanvasRenderingContext2D, size: number, gap: number, x: number, y: number): void {
+        ctx.lineWidth = size;
+        ctx.setLineDash([0, size + gap]);
+        ctx.lineDashOffset = x;
+        ctx.beginPath();
+        ctx.moveTo(0, 650 - y);
+        ctx.lineTo(1500, 650 - y);
+        ctx.stroke();
+    }
+
     public draw(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = bgColor;
-        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        ctx.fillRect(0, 0, 900, 650);
+
+        ctx.strokeStyle = "#0001";
+        ctx.lineCap = "round";
+        
+        this.drawDottedLine(ctx, 64, 0, 0, 0);
+        this.drawDottedLine(ctx, 48, 32 - 16, 32, 50);
+        this.drawDottedLine(ctx, 32, 32, 0, 80);
+        this.drawDottedLine(ctx, 32, 32, 32, 95);
+        this.drawDottedLine(ctx, 24, 40, 0, 110);
+
+        ctx.save();
+        transformTo(ctx, 450, 325, Math.PI);
+        this.drawDottedLine(ctx, 64, 0, 0, 0);
+        this.drawDottedLine(ctx, 48, 32 - 16, 32, 50);
+        this.drawDottedLine(ctx, 32, 32, 0, 80);
+        this.drawDottedLine(ctx, 32, 32, 32, 95);
+        this.drawDottedLine(ctx, 24, 40, 0, 110);
+        ctx.restore();
+
+        ctx.lineCap = "butt";
+        ctx.setLineDash([]);
 
         this.parchment.draw(ctx);
 
