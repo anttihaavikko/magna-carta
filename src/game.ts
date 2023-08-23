@@ -179,7 +179,7 @@ export class Game extends Entity {
         const ratio = score / text.join("").length;
         const totalScore = Math.floor(score * score + frees * score);
         
-        this.parchment.setTexts(Math.floor(ratio * 100) + "% DONE", totalScore.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
+        this.parchment.setTexts(Math.floor(ratio * 100) + "% DONE", totalScore);
 
         clearTimeout(this.kingTimer);
 

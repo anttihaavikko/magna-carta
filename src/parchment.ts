@@ -8,6 +8,9 @@ import { TextEntity } from "./text";
 import { TILE_SIZE } from "./word";
 
 export class Parchment extends Entity {
+    private score = 0;
+    private targetScore = 0;
+
     private ui = new Container(0, 0, [
         new TextEntity("0% DONE", 18, 750, 612, -1, ZERO, { align: "right", color: "#D5573B99" }),
         new TextEntity("0", 28, 750, 216, -1, ZERO, { align: "right", color: "#D5573B99" })
@@ -26,11 +29,14 @@ export class Parchment extends Entity {
     public update(tick: number, mouse: Mouse): void {
         super.update(tick, mouse);
         this.ui.update(tick, mouse);
+        const diff = this.targetScore >= this.score ? Math.min((this.targetScore - this.score), 100) : Math.max((this.targetScore - this.score), -100);
+        this.score = this.score + diff;
+        (this.ui.getChild(1) as TextEntity).content = this.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
 
-    public setTexts(done: string, score: string): void {
+    public setTexts(done: string, score: number): void {
         (this.ui.getChild(0) as TextEntity).content = done;
-        (this.ui.getChild(1) as TextEntity).content = score;
+        this.targetScore = score;
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
