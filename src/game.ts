@@ -58,7 +58,7 @@ const text = [
     "Greeting"
 ];
 
-const wordsPerLine = [7,5,4,4,4,1,1,2,1,1,1,1,1,4,1,2,1,1];
+const wordsPerLine = [7,5,4,4,3,1,1,1,2,1,1,1,1,1,4,1,2,1,1];
 
 export class Game extends Entity {
     public currentDepth = 0;
