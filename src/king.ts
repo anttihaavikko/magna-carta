@@ -1,3 +1,4 @@
+import { Bubble } from "./bubble";
 import { blushColor, capeColor, crownColor, shirtColor, skinColor } from "./colors";
 import { drawCircle } from "./engine/drawing";
 import { Entity } from "./engine/entity";
@@ -10,24 +11,45 @@ import { offset } from "./engine/vector";
 export class King extends Entity {
     private phase = 0;
     private face = new Face(blushColor);
+    private bubble = new Bubble(430, 220);
+
+    private showTimer: any;
 
     constructor() {
         super(200, 1100, 0, 0);
         this.tween = new Tween(this, easeQuadOut);
-        setTimeout(() => this.show(), 500); 
+        this.bubble.scale = { x: 0, y: 0 };
+        this.showTimer = setTimeout(() => this.show([
+            "Hey there! Could",
+            "you be so kind to",
+            "fit all this content",
+            "on that parchment?"
+        ]), 500);
     }
 
-    public show(): void {
-        this.tween.move({ x: 200, y: 600 }, 0.4)
+    public hideBubble(): void {
+        clearTimeout(this.showTimer);
+        this.bubble.hide();
+    }
+
+    public showMessage(messages: string[]): void {
+        this.bubble.show(messages);
+    }
+
+    public show(messages: string[]): void {
+        this.tween.move({ x: 200, y: 600 }, 0.4);
+        setTimeout(() => this.bubble.show(messages), 500);
     }
 
     public hide(): void {
+        this.bubble.hide();
         this.tween.move({ x: 200, y: 1100}, 0.4);
     }
 
     public update(tick: number, mouse: Mouse): void {
         super.update(tick, mouse);
         this.phase = Math.abs(Math.sin(tick * 0.0025)) * 0.8;
+        this.bubble.update(tick, mouse);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
@@ -122,6 +144,11 @@ export class King extends Entity {
         ctx.save();
         ctx.translate(this.p.x, this.p.y - 290 - this.phase * 45);
         this.face.draw(ctx);
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(this.p.x + 130, this.p.y - 500 - this.phase * 60);
+        this.bubble.draw(ctx);
         ctx.restore();
 
         ctx.restore();

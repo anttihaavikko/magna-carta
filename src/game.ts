@@ -71,6 +71,7 @@ export class Game extends Entity {
     ]);
     private hasRotated: boolean;
     private effects = new Container();
+    private kingTimer: any;
     
     constructor(private camera: Camera) {
         super(0, 0, 0, 0);
@@ -155,14 +156,36 @@ export class Game extends Entity {
         (this.ui.getChild(0) as TextEntity).content = Math.floor(ratio * 100) + "% DONE";
         (this.ui.getChild(1) as TextEntity).content = totalScore.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
-        if(totalScore > 2000 && !this.hasRotated) {
-            this.king.show();
+        clearTimeout(this.kingTimer);
+
+        if(ratio >= 1) {
+            this.king.show(["Good job!", "Didn't even know", "if a feat like", "that was possible!"]);
+            this.kingTimer = setTimeout(() => this.king.hide(), 5000);
             return;
         }
 
-        if(totalScore > 0) {
-            this.king.hide();
+        if(totalScore > 2000 && !this.hasRotated) {
+            this.king.show(["You can also rotate", "the words by right", "clicking while", "dragging them..."]);
             return;
         }
+
+        if(totalScore == 0) {
+            this.king.showMessage([
+                "Almost there!",
+                "You need to fully",
+                "fit the word on the",
+                "parchment over there."
+            ]);
+        }
+
+        if(totalScore > 0) {
+            this.king.showMessage(["", "Yes indeed, just", "like that!", ""]);
+            this.kingTimer = setTimeout(() => this.king.hide(), 2000);
+            return;
+        }
+    }
+
+    public hideBubble(): void {
+        this.king.hideBubble();
     }
 }

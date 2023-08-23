@@ -1,12 +1,9 @@
-import { ContextReplacementPlugin } from "webpack";
 import { Draggable } from "./engine/draggable";
 import { Mouse } from "./engine/mouse";
 import { Vector, offset } from "./engine/vector";
 import { Game } from "./game";
 import { roundRect } from "./engine/drawing";
-import { capeColor, tileBorder, tileColor } from "./colors";
-import { Pulse } from "./engine/pulse";
-import { random } from "./engine/random";
+import { tileBorder, tileColor } from "./colors";
 
 export const TILE_SIZE = 30;
 
@@ -129,6 +126,7 @@ export class Word extends Draggable {
     protected pick(): void {
         this.game.currentDepth++;
         this.d = this.game.currentDepth;
+        this.game.hideBubble();
     }
 
     protected click(): void {
