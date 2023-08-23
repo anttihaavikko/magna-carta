@@ -13,6 +13,7 @@ export class Word extends Draggable {
     private rotation = 0;
     private original: string;
     private blocked: boolean;
+    private time: number;
 
     private prevPos = { x: 0, y: 0 };
 
@@ -31,6 +32,8 @@ export class Word extends Draggable {
 
     public update(tick: number, mouse: Mouse): void {
         super.update(tick, mouse);
+
+        this.time = tick;
 
         if(this.dragging && this.rightClicked && !mouse.right) {
             this.rotation = (this.rotation + 1) % 4;
@@ -64,9 +67,16 @@ export class Word extends Draggable {
             ctx.setLineDash([]);
         }
 
-        ctx.fillStyle = "#000";
         const dx = this.rotated ? 0 : 1;
         const dy = this.rotated ? 1 : 0;
+
+        if(this.hovered || this.dragging) {
+            ctx.strokeStyle = "#fff";
+            ctx.lineWidth = 5;
+            ctx.strokeRect(this.p.x - 3, this.p.y - 3, this.s.x + 3, this.s.y + 3);
+        }
+
+        ctx.fillStyle = "#000";
         ctx.fillRect(this.p.x - 3, this.p.y - 3, this.s.x + 3, this.s.y + 3);
 
         ctx.fillStyle = tileBorder;
@@ -96,7 +106,8 @@ export class Word extends Draggable {
             if(letter.clash || partial && letter.outside) ctx.fillStyle = letter.bad || letter.outside ? "pink" : "#F1EE95";
             ctx.fillRect(this.p.x + i * TILE_SIZE * dx, this.p.y + i * TILE_SIZE * dy, TILE_SIZE - 3, TILE_SIZE - 3);
             ctx.fillStyle = "#000";
-            ctx.fillText(letter.letter, this.p.x + i * TILE_SIZE * dx + TILE_SIZE * 0.5 - 1, this.p.y + 19 + i * TILE_SIZE * dy);
+            const offset = this.dragging || this.hovered ? Math.sin(this.time * 0.008 + i * Math.PI * 0.1) * 2 : 0;
+            ctx.fillText(letter.letter, this.p.x + i * TILE_SIZE * dx + TILE_SIZE * 0.5 - 1, this.p.y + 19 + i * TILE_SIZE * dy + offset);
             if(letter.clash || letter.bad || partial && letter.outside) {
                 ctx.strokeStyle = letter.bad || letter.outside ? "#D5573B" : "#000";
                 ctx.setLineDash([]);
@@ -118,6 +129,8 @@ export class Word extends Draggable {
     }
 
     protected hover(): void {
+        this.game.currentDepth++;
+        this.d = this.game.currentDepth;
     }
 
     protected exit(): void {
