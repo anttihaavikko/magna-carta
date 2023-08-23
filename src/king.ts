@@ -38,7 +38,7 @@ export class King extends Entity {
 
     public show(messages: string[]): void {
         this.tween.move({ x: 200, y: 650 }, 0.4);
-        setTimeout(() => this.bubble.show(messages), 500);
+        this.showTimer = setTimeout(() => this.bubble.show(messages), 500);
     }
 
     public hide(): void {

@@ -4,7 +4,7 @@ import { drawEllipse } from "./engine/drawing";
 import { Entity } from "./engine/entity";
 import { Mouse } from "./engine/mouse";
 import { ZERO } from "./engine/vector";
-import { TextEntity } from "./text";
+import { TextEntity } from "./engine/text";
 import { TILE_SIZE } from "./word";
 
 export class Parchment extends Entity {

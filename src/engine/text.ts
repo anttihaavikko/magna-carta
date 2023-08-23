@@ -1,10 +1,10 @@
-import { font } from "./engine/constants";
-import { drawColoredText } from "./engine/drawing";
-import { Particle } from "./engine/particle";
-import { Vector } from "./engine/vector";
+import { font } from "./constants";
+import { drawColoredText } from "./drawing";
+import { Particle } from "./particle";
+import { Vector } from "./vector";
 
 export class TextEntity extends Particle {
-    constructor(public content: string, private fontSize: number, x: number, y: number, life: number, velocity: Vector, private options?: TextOptions) {
+    constructor(public content: string, protected fontSize: number, x: number, y: number, life: number, velocity: Vector, protected options?: TextOptions) {
         super(x, y, 0, 0, life, velocity);
     }
 
@@ -30,4 +30,6 @@ export interface TextOptions {
     scales?: boolean;
     angle?: number;
     markColors?: string[];
+    outline?: number;
+    spacing?: number;
 }

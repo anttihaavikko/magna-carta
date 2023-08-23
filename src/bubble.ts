@@ -2,10 +2,10 @@ import { roundRect } from "./engine/drawing";
 import { Entity } from "./engine/entity";
 import { Mouse } from "./engine/mouse";
 import { transformTo } from "./engine/transformer";
-import { ZERO } from "./engine/vector";
 
 export class Bubble extends Entity {
     private messages: string[] = [];
+    private timer: any;
 
     constructor(width: number, height: number) {
         super(0, 0, width, height);
@@ -18,11 +18,12 @@ export class Bubble extends Entity {
     public show(messages: string[]): void {
         this.messages = messages;
         this.tween.scale({ x: 1, y: 1}, 0.5);
+        clearTimeout(this.timer);
     }
 
     public hide(): void {
         this.tween.scale({ x: 0, y: 0}, 0.3);
-        setTimeout(() => this.messages = [], 300);
+        this.timer = setTimeout(() => this.messages = [], 300);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {

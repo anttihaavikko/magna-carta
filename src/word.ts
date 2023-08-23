@@ -145,6 +145,7 @@ export class Word extends Draggable {
         this.game.currentDepth++;
         this.d = this.game.currentDepth;
         this.game.hideBubble();
+        this.game.hideLogo();
     }
 
     protected click(): void {

@@ -11,8 +11,9 @@ import { Vector, ZERO } from "./engine/vector";
 import { HEIGHT, WIDTH } from "./index";
 import { King } from "./king";
 import { Parchment } from "./parchment";
-import { TextEntity } from "./text";
+import { TextEntity } from "./engine/text";
 import { TILE_SIZE, Word } from "./word";
+import { WobblyText } from "./engine/wobbly";
 
 const text = [
     "JOHN",
@@ -74,6 +75,11 @@ export class Game extends Entity {
     private parchment = new Parchment();
 
     private phase = 1;
+
+    private ui = new Container(0, 0, [
+        new WobblyText("MAGNA CARTA", 80, 100, 570, 0.6, 5, { align: "left", outline: 20, spacing: 5 }),
+        new WobblyText("by Antti Haavikko", 35, 240, 630, 0.2, 5, { align: "left", outline: 12, spacing: 5 })
+    ]);
     
     constructor(private camera: Camera) {
         super(0, 0, 0, 0);
@@ -111,6 +117,7 @@ export class Game extends Entity {
         this.effects.update(tick, mouse);
         this.blinders.update(tick, mouse);
         this.parchment.update(tick, mouse);
+        this.ui?.update(tick, mouse);
     }
 
     private drawDottedLine(ctx: CanvasRenderingContext2D, size: number, gap: number, x: number, y: number): void {
@@ -153,6 +160,9 @@ export class Game extends Entity {
         this.effects.draw(ctx);
         [...this.words].sort(sortByDepth).forEach(w => w.draw(ctx));
         this.king.draw(ctx);
+
+        ctx.lineJoin = "round";
+        this.ui?.draw(ctx);
         this.blinders.draw(ctx);
     }
 
@@ -212,5 +222,11 @@ export class Game extends Entity {
 
     public hideBubble(): void {
         this.king.hideBubble();
+    }
+
+    public hideLogo(): void {
+        if(!this.ui) return;
+        this.ui.hide(0.3);
+        setTimeout(() => this.ui = null);
     }
 }
