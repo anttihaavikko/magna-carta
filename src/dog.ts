@@ -146,16 +146,16 @@ export class Dog extends Entity {
         ctx.translate(this.p.x - 50, this.p.y - 170 - this.phase * 40);
         ctx.beginPath();
         ctx.moveTo(20, 10);
-        ctx.quadraticCurveTo(30, 75, 0, 80);
-        ctx.quadraticCurveTo(-40, 75, -20, 0);
+        ctx.quadraticCurveTo(30, 75 - this.phase * 20, 0, 80 - this.phase * 20);
+        ctx.quadraticCurveTo(-40, 75 - this.phase * 20, -20, 0);
         ctx.fill();
         ctx.stroke();
         ctx.beginPath();
         ctx.lineWidth = 7;
-        ctx.moveTo(-7, 80);
-        ctx.lineTo(-7, 50);
-        ctx.moveTo(7, 80);
-        ctx.lineTo(7, 50);
+        ctx.moveTo(-10, 80 - this.phase * 20);
+        ctx.lineTo(-10, 60 - this.phase * 20);
+        ctx.moveTo(7, 80 - this.phase * 20);
+        ctx.lineTo(7, 60 - this.phase * 20);
         ctx.stroke();
         ctx.restore();
         // right
@@ -164,16 +164,16 @@ export class Dog extends Entity {
         ctx.translate(this.p.x + 50, this.p.y - 170 - this.phase * 40);
         ctx.beginPath();
         ctx.moveTo(20, 0);
-        ctx.quadraticCurveTo(40, 75, 0, 80);
-        ctx.quadraticCurveTo(-30, 75, -20, 10);
+        ctx.quadraticCurveTo(40, 75, 0, 80 - this.phase * 20);
+        ctx.quadraticCurveTo(-30, 75 - this.phase * 20, -20, 10);
         ctx.fill();
         ctx.stroke();
         ctx.beginPath();
         ctx.lineWidth = 7;
-        ctx.moveTo(-7, 80);
-        ctx.lineTo(-7, 50);
-        ctx.moveTo(7, 80);
-        ctx.lineTo(7, 50);
+        ctx.moveTo(-7, 80 - this.phase * 20);
+        ctx.lineTo(-7, 60 - this.phase * 20);
+        ctx.moveTo(10, 80 - this.phase * 20);
+        ctx.lineTo(10, 60 - this.phase * 20);
         ctx.stroke();
         ctx.restore();
 
