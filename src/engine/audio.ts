@@ -1,4 +1,5 @@
 import { CPlayer } from "./audio-player";
+import { randomCell } from "./random";
 import { zzfx } from "./zzfx";
 
 export class AudioManager {
@@ -83,5 +84,16 @@ export class AudioManager {
 
     public blip(): void {
         zzfx(...[1.5,,538,,.01,.01,,.89,,-29,,,,.1,,,.11]);
+    }
+
+    public speak(): void {
+        const sound = randomCell([
+            [.5,,1496,.09,.09,.01,3,.14,,,-870,,,,3.2,.2,,.31,.02],
+            [.5,,1497,.09,.09,.01,1,.14,,-0.2,-870,,,,2.2,.2,,.31,.02],
+            [.5,,1497,.09,.09,.01,1,.14,,-0.2,-870,.01,,,1.2,.2,,.31,.03,.01],
+            [,,8,.15,,.04,1,1.38,-11,-44,1,,,,,.2],
+            [1.5,,478,.01,.09,.08,1,1.18,-1.1,,,,,.6,1,.3,.04,.46,.02]
+        ]);
+        zzfx(...sound);
     }
 }

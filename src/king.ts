@@ -4,6 +4,7 @@ import { drawCircle } from "./engine/drawing";
 import { Entity } from "./engine/entity";
 import { Face } from "./engine/face";
 import { Mouse } from "./engine/mouse";
+import { random } from "./engine/random";
 import { transformTo } from "./engine/transformer";
 import { Tween, easeQuadOut } from "./engine/tween";
 import { offset } from "./engine/vector";
@@ -12,7 +13,7 @@ import { Game } from "./game";
 export class King extends Entity {
     private phase = 0;
     private face = new Face(150, 150, blushColor);
-    private bubble = new Bubble(430, 220);
+    private bubble = new Bubble(430, 220, () => this.speak());
     private visible = false;
 
     private showTimer: any;
@@ -27,6 +28,11 @@ export class King extends Entity {
             "fit all this content",
             "on that parchment?"
         ]), 500);
+    }
+
+    public speak(): void {
+        this.face.openMouth(random(0.4, 0.9), 0.08);
+        this.game.audio.speak();
     }
 
     public hideBubble(): void {

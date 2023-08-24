@@ -7,7 +7,9 @@ export class Bubble extends Entity {
     private messages: string[] = [];
     private timer: any;
 
-    constructor(width: number, height: number) {
+    private current = 0;
+
+    constructor(width: number, height: number, private onWord: () => void) {
         super(0, 0, width, height);
     }
 
@@ -18,12 +20,26 @@ export class Bubble extends Entity {
     public show(messages: string[]): void {
         this.messages = messages;
         this.tween.scale({ x: 1, y: 1}, 0.5);
+        this.current = 0;
         clearTimeout(this.timer);
+
+        const timer = setInterval(() => {
+            if(this.current >= 0 && this.current < this.messages.join("").length) {
+                this.current++;
+                const letter = this.messages.join("").substring(this.current, this.current + 1);
+                if(letter == " ") this.onWord();
+                return;
+            }
+            clearInterval(timer);
+        }, 20);
     }
 
     public hide(): void {
         this.tween.scale({ x: 0, y: 0}, 0.3);
-        this.timer = setTimeout(() => this.messages = [], 300);
+        this.timer = setTimeout(() => {
+            this.messages = [];
+            this.current = -1;
+        }, 300);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
@@ -53,11 +69,16 @@ export class Bubble extends Entity {
         ctx.fillStyle = "#000";
         ctx.font = "30px arial black";
         const off = 22;
-        if(this.messages[0]) ctx.fillText(this.messages[0], this.s.x * 0.5, this.s.y * 0.5 - 30 - off);
-        if(this.messages[1]) ctx.fillText(this.messages[1], this.s.x * 0.5, this.s.y * 0.5 + 10 - off);
-        if(this.messages[2]) ctx.fillText(this.messages[2], this.s.x * 0.5, this.s.y * 0.5 + 50 - off);
-        if(this.messages[3]) ctx.fillText(this.messages[3], this.s.x * 0.5, this.s.y * 0.5 + 90 - off);
+        if(this.messages[0]) ctx.fillText(this.getText(0), this.s.x * 0.5, this.s.y * 0.5 - 30 - off);
+        if(this.messages[1]) ctx.fillText(this.getText(1), this.s.x * 0.5, this.s.y * 0.5 + 10 - off);
+        if(this.messages[2]) ctx.fillText(this.getText(2), this.s.x * 0.5, this.s.y * 0.5 + 50 - off);
+        if(this.messages[3]) ctx.fillText(this.getText(3), this.s.x * 0.5, this.s.y * 0.5 + 90 - off);
 
         ctx.restore();
+    }
+
+    private getText(index: number): string {
+        const offset = this.messages.slice(0, index).reduce((total, m) => total + m.length, 0);
+        return this.messages[index].substring(0, Math.max(this.current - offset, 0));
     }
 }
