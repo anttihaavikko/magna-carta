@@ -41,7 +41,7 @@ export class Dog extends Entity {
     }
 
     private bark(count = 1): void {
-        this.face.openMouth(0.6, 0.15);
+        this.face.openMouth(0.6, 0.1);
         this.game.audio.bark();
         if(Math.random() < 0.5 && count < 2) setTimeout(() => this.bark(count + 1), 200 + Math.random() * 200);
     }
