@@ -71,7 +71,7 @@ export class Parchment extends Entity {
 
         ctx.beginPath();
         ctx.moveTo(390, 185 + topPos);
-        ctx.quadraticCurveTo(380, 205 + topPos, 390, 225 + topPos);
+        ctx.quadraticCurveTo(375, 205 + topPos, 390, 225 + topPos);
         ctx.lineTo(780, 225 + topPos);
         ctx.lineTo(780, 185 + topPos);
         ctx.closePath();
@@ -85,7 +85,7 @@ export class Parchment extends Entity {
 
         ctx.beginPath();
         ctx.moveTo(390, 585);
-        ctx.quadraticCurveTo(380, 605, 390, 625);
+        ctx.quadraticCurveTo(375, 605, 390, 625);
         ctx.lineTo(780, 625);
         ctx.lineTo(780, 585);
         ctx.closePath();
