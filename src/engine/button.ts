@@ -23,7 +23,7 @@ export class ButtonEntity extends Entity {
         if(!wasHovered && this.hovered) this.hover();
         if(!mouse.pressing) {
             if(this.pressed && !mouse.dragging && this.hovered) {
-                this.audio.pop();
+                this.audio.click();
                 this.onClick();
             }
             this.pressed = false;
@@ -53,6 +53,6 @@ export class ButtonEntity extends Entity {
     }
 
     private hover(): void {
-        this.audio.thud();
+        this.audio.hover();
     }
 }

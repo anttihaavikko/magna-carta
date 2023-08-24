@@ -45,6 +45,12 @@ export class AudioManager {
         // });
     }
 
+    public hover(): void {
+    }
+
+    public click(): void {
+    }
+
     public bark(): void {
         zzfx(...[1.06,,23,.1,,0,4,2.38,-0.5,14,,,.01,.2]);
         zzfx(...[1.02,,158,.14,,0,3,2.84,2,,,,.06,,-0.1,,,.29,,.39]);
@@ -77,11 +83,5 @@ export class AudioManager {
 
     public blip(): void {
         zzfx(...[1.5,,538,,.01,.01,,.89,,-29,,,,.1,,,.11]);
-    }
-
-    public thud(): void {
-    }
-
-    public pop(): void {
     }
 }
