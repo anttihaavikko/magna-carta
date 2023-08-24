@@ -6,6 +6,8 @@ import { roundRect } from "./engine/drawing";
 import { tileBorder, tileColor } from "./colors";
 import { Pulse } from "./engine/pulse";
 import { random } from "./engine/random";
+import { moveTowards } from "./engine/math";
+import { transformTo } from "./engine/transformer";
 
 export const TILE_SIZE = 30;
 
@@ -17,6 +19,7 @@ export class Word extends Draggable {
     private original: string;
     private blocked: boolean;
     private time: number;
+    private bulge = 0;
 
     private prevPos = { x: 0, y: 0 };
 
@@ -50,6 +53,8 @@ export class Word extends Draggable {
 
             this.game.audio.rotate();
         }
+
+        this.bulge = moveTowards(this.bulge, 0, 0.05);
 
         this.rightClicked = mouse.right;
         this.spaced = mouse.space;
@@ -116,7 +121,13 @@ export class Word extends Draggable {
             ctx.fillRect(this.p.x + i * TILE_SIZE * dx, this.p.y + i * TILE_SIZE * dy, TILE_SIZE - 3, TILE_SIZE - 3);
             ctx.fillStyle = "#000";
             const offset = this.dragging || this.hovered ? Math.sin(this.time * 0.008 + i * Math.PI * 0.1) * 2 : 0;
-            ctx.fillText(letter.letter, this.p.x + i * TILE_SIZE * dx + TILE_SIZE * 0.5 - 1, this.p.y + 19 + i * TILE_SIZE * dy + offset);
+            const p = { x: this.p.x + i * TILE_SIZE * dx + TILE_SIZE * 0.5 - 1, y: this.p.y + 19 + i * TILE_SIZE * dy + offset };
+            ctx.save();
+            const phase = Math.abs(Math.sin(this.bulge * Math.PI));
+            const bulgeAmount = 1 + phase * 0.4;
+            transformTo(ctx, p.x, p.y - 5, 0, bulgeAmount, bulgeAmount);
+            ctx.fillText(letter.letter, p.x, p.y);
+            ctx.restore();
             if(letter.clash || letter.bad || partial && letter.outside) {
                 ctx.strokeStyle = letter.bad || letter.outside ? "#D5573B" : "#000";
                 ctx.setLineDash([]);
@@ -162,6 +173,7 @@ export class Word extends Draggable {
         const p = offset(this.p, TILE_SIZE * 0.5, TILE_SIZE * 0.5);
         this.game.evaluate();
         this.game.audio.drop();
+        this.bulge = 1;
     }
 
     private getSnapPos(): Vector {
