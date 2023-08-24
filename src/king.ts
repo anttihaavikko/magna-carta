@@ -31,8 +31,10 @@ export class King extends Entity {
     }
 
     public speak(): void {
-        this.face.openMouth(random(0.4, 0.9), 0.08);
-        this.game.audio.speak();
+        if(this.visible) {
+            this.face.openMouth(random(0.4, 0.9), 0.08);
+            this.game.audio.speak();
+        }
     }
 
     public hideBubble(): void {
