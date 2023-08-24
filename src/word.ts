@@ -12,6 +12,7 @@ export const TILE_SIZE = 30;
 export class Word extends Draggable {
     private rotated = false;
     private rightClicked = false;
+    private spaced = false;
     private rotation = 0;
     private original: string;
     private blocked: boolean;
@@ -37,7 +38,7 @@ export class Word extends Draggable {
 
         this.time = tick;
 
-        if(this.dragging && this.rightClicked && !mouse.right) {
+        if(this.dragging && (this.rightClicked && !mouse.right || this.spaced && !mouse.space)) {
 
             this.game.addEffect(new Pulse(this.p.x + this.offset.x, this.p.y + this.offset.y, 50, 0.8, 10, 100));
 
@@ -49,6 +50,7 @@ export class Word extends Draggable {
         }
 
         this.rightClicked = mouse.right;
+        this.spaced = mouse.space;
 
         const dx = this.rotated ? 0 : 1;
         const dy = this.rotated ? 1 : 0;

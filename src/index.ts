@@ -2,12 +2,13 @@ import { ContextReplacementPlugin } from "webpack";
 import { Camera } from "./engine/camera";
 import { Mouse } from "./engine/mouse";
 import { Game } from "./game";
+import { AudioManager } from "./engine/audio";
 
 const canvas: HTMLCanvasElement = document.createElement("canvas");
 const ctx: CanvasRenderingContext2D = canvas.getContext("2d");
 
 const mouse: Mouse = { x: 0, y: 0 };
-const game = new Game(new Camera());
+const game = new Game(new Camera(), new AudioManager());
 
 export const WIDTH = 900;
 export const HEIGHT = 650;
@@ -57,8 +58,17 @@ const resize = () => {
 resize();
 window.onresize = resize;
 
+document.onkeyup = (e: KeyboardEvent) => {
+  if(e.key == ' ') {
+    mouse.space = false;
+  }
+};
+
 document.onkeydown = (e: KeyboardEvent) => {
   // game.audio.prepare();
+  if(e.key == ' ') {
+    mouse.space = true;
+  }
   if(e.key == 'f') {
     canvas.requestFullscreen();
   }
@@ -81,7 +91,7 @@ document.onkeydown = (e: KeyboardEvent) => {
 // };
 
 document.onmousedown = (e: MouseEvent) => {
-  // game.audio.play();
+  game.audio.play();
   if(e.button == 0) mouse.pressing = true;
   if(e.button > 0) mouse.right = true;
 };

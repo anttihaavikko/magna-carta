@@ -36,8 +36,14 @@ export class Dog extends Entity {
         this.diff = random(-500, 500);
         this.rotation = Math.random() < 0.7 ? 0 : 1;
         this.show();
-        setTimeout(() => this.face.openMouth(0.7, 0.2), 200);
+        setTimeout(() => this.bark(), 300);
         setTimeout(() => this.hide(), 900);
+    }
+
+    private bark(count = 1): void {
+        this.face.openMouth(0.6, 0.15);
+        this.game.audio.bark();
+        if(Math.random() < 0.5 && count < 2) setTimeout(() => this.bark(count + 1), 200 + Math.random() * 200);
     }
 
     public show(): void {
@@ -132,15 +138,19 @@ export class Dog extends Entity {
 
         // head filling
         drawCircle(ctx, offset(this.p, 0, -300 - this.phase * 20), 87, dogColor);
-        drawCircle(ctx, offset(this.p, 10, -300 - this.phase * 40), 70, "#fff4");
-        drawEllipse(ctx, offset(this.p, 10, 0 - this.phase * 40), 80, 200, "#fff4");
+        ctx.strokeStyle = "#f7f5bf";
+        ctx.lineDashOffset = -this.phase * 10;
+        drawCircle(ctx, offset(this.p, 10, -300 - this.phase * 40), 50, "#f7f5bf");
+        ctx.stroke();
+        drawEllipse(ctx, offset(this.p, 10, 0 - this.phase * 40), 80, 200, "#f7f5bf");
+        ctx.stroke();
 
         ctx.setLineDash([]);
 
         // paws
         ctx.lineWidth = 10;
         ctx.strokeStyle = "#000";
-        ctx.fillStyle = dogColor;
+        ctx.fillStyle = "#f7f5bf";
         // left
         ctx.save();
         ctx.translate(this.p.x - 50, this.p.y - 170 - this.phase * 40);
@@ -152,8 +162,8 @@ export class Dog extends Entity {
         ctx.stroke();
         ctx.beginPath();
         ctx.lineWidth = 7;
-        ctx.moveTo(-10, 80 - this.phase * 20);
-        ctx.lineTo(-10, 60 - this.phase * 20);
+        ctx.moveTo(-10, 75 - this.phase * 20);
+        ctx.lineTo(-10, 55 - this.phase * 20);
         ctx.moveTo(7, 80 - this.phase * 20);
         ctx.lineTo(7, 60 - this.phase * 20);
         ctx.stroke();
@@ -172,8 +182,8 @@ export class Dog extends Entity {
         ctx.lineWidth = 7;
         ctx.moveTo(-7, 80 - this.phase * 20);
         ctx.lineTo(-7, 60 - this.phase * 20);
-        ctx.moveTo(10, 80 - this.phase * 20);
-        ctx.lineTo(10, 60 - this.phase * 20);
+        ctx.moveTo(10, 75 - this.phase * 20);
+        ctx.lineTo(10, 55 - this.phase * 20);
         ctx.stroke();
         ctx.restore();
 

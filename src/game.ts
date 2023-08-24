@@ -17,6 +17,8 @@ import { WobblyText } from "./engine/wobbly";
 import { Dog } from "./dog";
 import { LineParticle } from "./engine/line";
 import { Pulse } from "./engine/pulse";
+import { AudioManager } from "./engine/audio";
+import { song } from "./song";
 
 const text = [
     "JOHN",
@@ -89,8 +91,9 @@ export class Game extends Entity {
         new WobblyText("by Antti Haavikko", 35, 240, 630, 0.2, 5, { align: "left", outline: 12, spacing: 5 })
     ]);
     
-    constructor(private camera: Camera) {
+    constructor(private camera: Camera, public audio: AudioManager) {
         super(0, 0, 0, 0);
+        audio.prepare(song);
         let x = 0;
         let y = 0;
         let count = 0;
