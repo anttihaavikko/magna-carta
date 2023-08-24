@@ -11,7 +11,7 @@ import { Game } from "./game";
 
 export class King extends Entity {
     private phase = 0;
-    private face = new Face(blushColor);
+    private face = new Face(150, 150, blushColor);
     private bubble = new Bubble(430, 220);
     private visible = false;
 

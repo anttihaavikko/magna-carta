@@ -13,7 +13,7 @@ const dogColor = crownColor;
 
 export class Dog extends Entity {
     private phase = 0;
-    private face = new Face(blushColor);
+    private face = new Face(150, 150, blushColor);
     private visible = true;
     private diff = 250;
     private rotation = 0;
