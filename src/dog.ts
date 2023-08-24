@@ -47,11 +47,13 @@ export class Dog extends Entity {
     }
 
     public show(): void {
+        if(!this.visible) this.game.audio.appear();
         this.visible = true;
         this.tween.move({ x: this.p.x, y: 650 }, 0.4);
     }
 
     public hide(): void {
+        this.game.audio.appear();
         this.visible = false;
         this.tween.move({ x: this.p.x, y: 1150}, 0.9);
     }

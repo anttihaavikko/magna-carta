@@ -47,6 +47,8 @@ export class Word extends Draggable {
             this.word = this.rotation > 1 ? this.original.split("").reverse().join("") : this.original;
             this.offset = { x: this.offset.y, y: this.offset.x };
             this.game.markRotate();
+
+            this.game.audio.rotate();
         }
 
         this.rightClicked = mouse.right;
@@ -138,6 +140,7 @@ export class Word extends Draggable {
     protected hover(): void {
         this.game.currentDepth++;
         this.d = this.game.currentDepth;
+        this.game.audio.blip();
     }
 
     protected exit(): void {
@@ -148,6 +151,7 @@ export class Word extends Draggable {
         this.d = this.game.currentDepth;
         this.game.hideBubble();
         this.game.hideLogo();
+        this.game.audio.pick();
     }
 
     protected click(): void {
@@ -157,6 +161,7 @@ export class Word extends Draggable {
         this.p = this.getSnapPos();
         const p = offset(this.p, TILE_SIZE * 0.5, TILE_SIZE * 0.5);
         this.game.evaluate();
+        this.game.audio.drop();
     }
 
     private getSnapPos(): Vector {

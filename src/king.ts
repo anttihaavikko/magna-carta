@@ -13,6 +13,7 @@ export class King extends Entity {
     private phase = 0;
     private face = new Face(blushColor);
     private bubble = new Bubble(430, 220);
+    private visible = false;
 
     private showTimer: any;
 
@@ -38,13 +39,17 @@ export class King extends Entity {
     }
 
     public show(messages: string[]): void {
+        if(!this.visible) this.game.audio.appear();
         this.tween.move({ x: 200, y: 650 }, 0.4);
+        this.visible = true;
         this.showTimer = setTimeout(() => this.bubble.show(messages), 500);
     }
 
     public hide(): void {
+        this.visible = false;
         this.bubble.hide();
         this.tween.move({ x: 200, y: 1150}, 0.4);
+        this.game.audio.appear();
     }
 
     public update(tick: number, mouse: Mouse): void {
