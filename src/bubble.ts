@@ -31,7 +31,7 @@ export class Bubble extends Entity {
                 return;
             }
             clearInterval(timer);
-        }, 20);
+        }, 25);
     }
 
     public hide(): void {
