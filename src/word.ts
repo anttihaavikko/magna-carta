@@ -79,7 +79,7 @@ export class Word extends Draggable {
 
         if(this.hovered || this.dragging) {
             ctx.strokeStyle = "#fff";
-            ctx.lineWidth = 5;
+            ctx.lineWidth = 7;
             ctx.strokeRect(this.p.x - 3, this.p.y - 3, this.s.x + 3, this.s.y + 3);
         }
 
