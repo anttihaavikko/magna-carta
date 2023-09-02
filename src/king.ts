@@ -70,6 +70,17 @@ export class King extends Entity {
     public draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         transformTo(ctx, this.p.x, this.p.y, 0, 0.9, 0.9);
+
+        // cape corners
+        ctx.beginPath();
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 10;
+        drawCircle(ctx, { x: this.p.x - 60, y: this.p.y - 220 - this.phase * 10 }, 20, "#fff");
+        ctx.stroke();
+        ctx.beginPath();
+        drawCircle(ctx, { x: this.p.x + 60, y: this.p.y - 220 - this.phase * 10 }, 20, "#fff");
+        ctx.stroke();
+
         // head outline
         drawCircle(ctx, offset(this.p, 0, -300 - this.phase * 20), 100, "#000");
         // ears outline
@@ -78,8 +89,6 @@ export class King extends Entity {
 
         // body
         ctx.beginPath();
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 10;
         ctx.fillStyle = capeColor;
         ctx.moveTo(this.p.x - 150 + this.phase * 7, this.p.y + 20);
         ctx.quadraticCurveTo(this.p.x, this.p.y - 500 - this.phase * 50, this.p.x + 150 - this.phase * 7, this.p.y + 20);
